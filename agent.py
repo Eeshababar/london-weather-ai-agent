@@ -22,31 +22,38 @@ from groq import Groq
 # STEP 2: INITIALIZE GROQ CLIENT
 # ============================================================
 
+
+# ============================================================
+# STEP 2: INITIALIZE GROQ CLIENT
+# ============================================================
+
+import streamlit as st
+
+# First check environment variables
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
-# If environment variable is unavailable,
-# retrieve the key from Streamlit Secrets.
-
+# If unavailable, check Streamlit Secrets
 if not GROQ_API_KEY:
 
     try:
-        import streamlit as st
         GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 
-    except Exception:
+    except (KeyError, FileNotFoundError):
         GROQ_API_KEY = None
 
-
+# Validate API key
 if not GROQ_API_KEY:
+
     raise ValueError(
         "GROQ_API_KEY is missing. "
-        "Configure your API key in Streamlit Secrets."
+        "Please configure it in Streamlit Cloud Settings > Secrets."
     )
 
+# Initialize Groq client
 client = Groq(api_key=GROQ_API_KEY)
 
-# Select the LLM
 MODEL = "openai/gpt-oss-20b"
+
 
 
 # ============================================================
