@@ -17,12 +17,30 @@ from groq import Groq
 # STEP 2: INITIALIZE GROQ CLIENT
 # ============================================================
 
+
+# ============================================================
+# STEP 2: INITIALIZE GROQ CLIENT
+# ============================================================
+
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+
+# If environment variable is unavailable,
+# retrieve the key from Streamlit Secrets.
+
+if not GROQ_API_KEY:
+
+    try:
+        import streamlit as st
+        GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+
+    except Exception:
+        GROQ_API_KEY = None
+
 
 if not GROQ_API_KEY:
     raise ValueError(
         "GROQ_API_KEY is missing. "
-        "Configure your API key first."
+        "Configure your API key in Streamlit Secrets."
     )
 
 client = Groq(api_key=GROQ_API_KEY)
